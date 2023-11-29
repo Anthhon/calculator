@@ -8,26 +8,26 @@
 
 void usage_print(char *program)
 {
-        char *program_name = basename(program);
+    char *program_name = basename(program);
 
-        LogInfo("Usage: %s <formula>\n", program_name);
-        exit(EXIT_SUCCESS);
+    LogInfo("Usage: %s <formula>\n", program_name);
+    exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv)
 {
-        switch (argc)
-        {
-                case 1:
-                        usage_print(argv[0]);
-                        break;
-                case 2:
-                        tokenize_input(argv[1]);
-                        break;
-                default:
-                        LogError("Invalid input provided\n");
-                        break;
-        }
+    switch (argc)
+    {
+        case 1:
+            usage_print(argv[0]);
+            break;
+        case 2:
+            tokenize_input(argv[1]);
+            break;
+        default:
+            LogExit("Invalid input provided\n");
+            break;
+    }
 
-        return 0;
+    return 0;
 }
