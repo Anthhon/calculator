@@ -6,29 +6,26 @@
 
 #include "includes.h"
 
-OperationsManager operations_manager = {0};
-
-void operation_push(int64_t value, uint8_t operation, bool need_new_oper)
+void operation_push(OperationsManager *operations_manager, int64_t value, OperationType operation, bool needs_new_operation)
 {
     Operation new_operation = {
         .value = value,
         .operation = operation,
     };
 
-    memcpy(&(operations_manager.operations[operations_manager.capacity - 1]), &new_operation, sizeof(Operation));
+    memcpy(&(operations_manager->operations[operations_manager->capacity - 1]), &new_operation, sizeof(Operation));
 
-    if (need_new_oper) {
-        ++operations_manager.capacity;
+    if (needs_new_operation) {
+        ++operations_manager->capacity;
 
-        operations_manager.operations = realloc(operations_manager.operations, (operations_manager.capacity * sizeof(Operation)));
-        if (operations_manager.operations == NULL) {
-            LogExit("Could not allocate memory to store operation!");
+        operations_manager->operations = realloc(operations_manager->operations, (operations_manager->capacity * sizeof(Operation)));
+        if (operations_manager->operations == NULL) {
+            LogExit("Could not allocate memory to store operations!\n");
         }
     }
-
 }
 
-void tokenize_input(char *formula)
+void tokenize_and_parse_input(OperationsManager *operations_manager, char *formula)
 {
     // Creates a copy of the original formula to avoid errors due to
     // 'strtok' function manipulating the original formula when parsing
@@ -38,45 +35,42 @@ void tokenize_input(char *formula)
     char *token = NULL;
     char *base_ptr = formula;
     char delimiter = formula_cpy[0];
-    uint8_t operation_type = OPER_NONE;
-
-    operations_manager.capacity = 1;
-    operations_manager.operations = realloc(operations_manager.operations, sizeof(Operation));
+    uint8_t operation_type = OPERATION_NONE;
 
     // TODO: Implement a better parser which supports 'priority' into each operation
     //       taking into account for '{[()]}' symbols
     while ((token = strtok_r(base_ptr, "+-*/", &base_ptr))) {
         int64_t operation_value = atoi(token);
         bool next_operation_exists = false;
-        operation_type = OPER_NONE;
+        operation_type = OPERATION_NONE;
 
         if (*base_ptr) {
             delimiter = formula_cpy[(base_ptr - formula) - 1];
             switch (delimiter)
             {
                 case '+':
-                    operation_type = OPER_SUM;
+                    operation_type = OPERATION_ADD;
                     break;
                 case '-':
-                    operation_type = OPER_MIN;
+                    operation_type = OPERATION_SUBTRACT;
                     break;
                 case '*':
-                    operation_type = OPER_MUL;
+                    operation_type = OPERATION_MULTIPLY;
                     break;
                 case '/':
-                    operation_type = OPER_DIV;
+                    operation_type = OPERATION_DIVIDE;
                     break;
                 case '^':
-                    operation_type = OPER_POW;
+                    operation_type = OPERATION_POWER;
                     break;
                 default:
-                    operation_type = OPER_NONE;
+                    LogExit("Unknown operator has been taken\n");
                     break;
             }
 
             next_operation_exists = true;
         }
 
-        operation_push(operation_value, operation_type, next_operation_exists);
+        operation_push(operations_manager, operation_value, operation_type, next_operation_exists);
     }
 }

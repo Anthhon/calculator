@@ -11,18 +11,18 @@
 
 #define OPERATIONS_SYMBOLS "+-*/^"
 
-enum {
-    OPER_SUM,
-    OPER_MIN,
-    OPER_MUL,
-    OPER_DIV,
-    OPER_POW,
-    OPER_NONE,
-};
+typedef enum {
+    OPERATION_ADD,
+    OPERATION_SUBTRACT,
+    OPERATION_MULTIPLY,
+    OPERATION_DIVIDE,
+    OPERATION_POWER,
+    OPERATION_NONE,
+} OperationType;
 
 typedef struct {
     int64_t value;
-    uint8_t operation;
+    OperationType operation;
 } Operation;
 
 typedef struct {
