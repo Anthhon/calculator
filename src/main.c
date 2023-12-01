@@ -5,9 +5,10 @@
 #include <libgen.h>
 #include <errno.h>
 #include <math.h>
+#include <string.h>
 
 #include "includes.h"
-#include "tokenizer.h"
+#include "lexer.h"
 
 void usage_print(char *program)
 {
@@ -17,48 +18,41 @@ void usage_print(char *program)
     exit(EXIT_SUCCESS);
 }
 
+// This function is intended to be used only for debugging purposes
+void tokens_print(TokensManager *tokens_manager)
+{
+    char *tok_text = NULL;
+
+    LogInfo("Input: %s\n", tokens_manager->tokens->text);
+
+    for (uint16_t i = 0; i < tokens_manager->capacity; i++) {
+        // This line could scare a lil bit, but it's just copying
+        // the content from the text to 'tok_text', using the given position by the token
+        // itself.
+        tok_text = strndup(&tokens_manager->tokens[i].text[tokens_manager->tokens[i].position], tokens_manager->tokens[i].length);
+        if (tok_text == NULL) {
+            LogExit("Could not allocate memory to token text\n");
+        }
+
+        LogInfo("Token %u::(text: %s, len: %u, pos: %u, type: %i)\n", 
+                i, 
+                tok_text, 
+                tokens_manager->tokens[i].length, 
+                tokens_manager->tokens[i].position, 
+                tokens_manager->tokens[i].type);
+
+        free(tok_text);
+        tok_text = NULL;
+    }
+}
+
 void calculate_formula(char *formula)
 {
-    OperationsManager operations_manager = {0};
+    TokensManager tokens_manager = {0};
 
-    operations_manager.capacity = 1;
-    operations_manager.operations = realloc(operations_manager.operations, sizeof(Operation));
-    if (operations_manager.operations == NULL) {
-        LogExit("Could not allocate memory to store operations!\n");
-    }
+    tokenize_input(&tokens_manager, formula);
 
-    tokenize_and_parse_input(&operations_manager, formula);
-
-    int64_t accumulator = operations_manager.operations[0].value;
-    for (int i = 0; i < operations_manager.capacity; ++i) {
-        int64_t next_value = operations_manager.operations[i + 1].value;
-        OperationType operation = operations_manager.operations[i].operation;
-
-        switch (operation) {
-            case OPERATION_ADD:
-                accumulator += next_value;
-                break;
-            case OPERATION_SUBTRACT:
-                accumulator -= next_value;
-                break;
-            case OPERATION_MULTIPLY:
-                accumulator *= next_value;
-                break;
-            case OPERATION_DIVIDE:
-                accumulator /= next_value;
-                break;
-            case OPERATION_POWER:
-                accumulator = pow(accumulator, next_value);
-                break;
-            default:
-                break;
-        }
-    }
-
-    LogInfo("%li\n", accumulator);
-
-    free(operations_manager.operations);
-    operations_manager.operations = NULL;
+    tokens_print(&tokens_manager);
 }
 
 int main(int argc, char **argv)
@@ -72,7 +66,9 @@ int main(int argc, char **argv)
             calculate_formula(argv[1]);
             break;
         default:
-            LogExit("Invalid input provided\n");
+            // TODO: Handle multiple arguments input, when multiple args were passed it should
+            // concatenate them all in a single 'String' and pass them into 'calculate_formula'
+            LogExit("Multiple arguments not handled yet!\n");
             break;
     }
 
