@@ -14,6 +14,7 @@ calc <formula>
 - [X] Implement lexer to tokenize input
 - [ ] Implement parser to handle tokens and produces an abstract syntax tree
 - [ ] Implement formula interpreter
+- [ ] Create test script
 - [ ] Improve interpreter to handle equations
 - [ ] Search (and implement solutions) for errors and edge cases
 - [ ] Search for possible optimizations
@@ -25,3 +26,7 @@ If you have any questions, suggestions, or need assistance, feel free to reach o
 Also, don't forget to check the [project roadmap section](https://github.com/Anthhon/calculator#project-roadmap) and see if anything interest you.
 
 We appreciate your interest in contributing to `calculator` and look forward to your contributions!
+
+### References
+
+- [How to write an interpreter from scratch](https://www.toptal.com/scala/writing-an-interpreter)
