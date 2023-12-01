@@ -1,6 +1,6 @@
 # Calculator
 
-'Calculator' is a terminal based calculator implemented entirely in C.
+`Calculator` is a terminal based calculator implemented entirely in C.
 
 ## Usage
 
