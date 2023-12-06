@@ -9,13 +9,19 @@
 #define OPERATIONS_SYMBOLS "+-*/^"
 
 typedef enum {
-    TOKEN_ADD = '+',
-    TOKEN_SUB = '-',
-    TOKEN_MUL = '*',
-    TOKEN_DIV = '/',
-    TOKEN_POW = '^',
+    // Others
     TOKEN_NONE = 0,
     TOKEN_NUMBER,
+
+    // Operations
+    TOKEN_ADD, TOKEN_SUB,
+    TOKEN_MUL, TOKEN_DIV,
+    TOKEN_POW,
+
+    // Symbols
+    TOKEN_L_BRACE, TOKEN_R_BRACE,
+    TOKEN_L_BRACKET, TOKEN_R_BRACKET,
+    TOKEN_L_PARENTHESES, TOKEN_R_PARENTHESES,
 } TokenType;
 
 typedef struct {

@@ -1,0 +1,13 @@
+operation -> expr, operator, expr ;
+
+operator -> "+" | "-"
+          | "*" | "/" 
+          | "^" ;
+
+expr -> operation 
+      | grouping
+      | NUMBER ;
+
+grouping -> "(", expr, ")" 
+          | "[", expr, "]"
+          | "{", expr, "}" ;
