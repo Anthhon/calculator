@@ -15,12 +15,16 @@ uint8_t test_simple_formula(void)
     };
     const uint8_t expected_lengths[] = {1, 3, 1, 1, 1, 1, 1, 1, 1, 2};
     const char *expected_texts[] = {"-", "200", "+", "3", "*", "4", "/", "2", "^", "33"};
-
-    TokensManager tokens_manager = {0};
     uint8_t exit_status = 0;
 
+    TokensManager tokens_manager = {
+        .tokens = NULL,
+        .capacity = 0,
+        .text = "-200 + 3 *4 / 2^33",
+    };
+
     // Test 1 - Check for correct capacity, values and types for each type of operation
-    tokenize_input(&tokens_manager, "-200 + 3 *4 / 2^33");
+    tokenize_input(&tokens_manager);
 
     // Check for correct capacity and NULL tokens
     ++exit_status;
@@ -43,7 +47,7 @@ uint8_t test_simple_formula(void)
         const Token *token = &tokens_manager.tokens[i];
         const char *expected_text = expected_texts[i];
         ++exit_status;
-        if (strncmp(&token->text[token->position], expected_text, token->length) != 0) return exit_status;
+        if (strncmp(&tokens_manager.text[token->position], expected_text, token->length) != 0) return exit_status;
     }
 
     return 0;

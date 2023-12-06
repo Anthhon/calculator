@@ -67,7 +67,7 @@ void tokens_print(TokensManager *tokens_manager)
         // This line could scare a lil bit, but it's just copying
         // the content from the text to 'tok_text', using the given position by the token
         // itself.
-        tok_text = strndup(&tokens_manager->tokens[i].text[tokens_manager->tokens[i].position], tokens_manager->tokens[i].length);
+        tok_text = strndup(&tokens_manager->text[tokens_manager->tokens[i].position], tokens_manager->tokens[i].length);
         if (tok_text == NULL) {
             error_report(ERR_INSUFICIENT_MEMORY, NULL);
         }
@@ -87,8 +87,14 @@ void tokens_print(TokensManager *tokens_manager)
 
 void calculate_formula(char *formula)
 {
-    TokensManager tokens_manager = {0};
-    tokenize_input(&tokens_manager, formula);
+    TokensManager tokens_manager = {
+        .tokens = NULL,
+        .capacity = 0,
+        .text = formula,
+    };
+
+
+    tokenize_input(&tokens_manager);
     tokens_print(&tokens_manager);
 
     //TreeNode *tree_root = parse_tokens(&tokens_manager);

@@ -1,2 +1,6 @@
 /build
 /build/*
+
+# gprof debug files
+gmon.out
+analysis.txt

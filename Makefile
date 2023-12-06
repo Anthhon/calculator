@@ -17,7 +17,7 @@ build:
 
 debug:
 	@echo "[+] Building project..."
-	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) -g
+	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) -g -pg
 	@echo "[+] Project built successfully!"
 
 run:

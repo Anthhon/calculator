@@ -25,7 +25,6 @@ typedef enum {
 } TokenType;
 
 typedef struct {
-    const char *text;
     uint16_t length;
     uint16_t position;
     TokenType type;
@@ -34,9 +33,10 @@ typedef struct {
 typedef struct {
     Token *tokens;
     uint16_t capacity;
+    const char *text;
 } TokensManager;
 
-void token_push(TokensManager *tokens_manager, const char *src, const uint16_t length, const uint16_t position, const TokenType type);
-void tokenize_input(TokensManager *tokens_manager, const char *input);
+void token_push(TokensManager *tokens_manager, const uint16_t length, const uint16_t position, const TokenType type);
+void tokenize_input(TokensManager *tokens_manager);
 
 #endif // _TOKENIZER_H_
