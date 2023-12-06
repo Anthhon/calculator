@@ -95,6 +95,9 @@ void calculate_formula(char *formula)
 
     ////tree_sort_by_type(tree_root);
     //tree_print(tree_root);
+    
+    free(tokens_manager.tokens);
+    tokens_manager.tokens = NULL;
 }
 
 #define DEBUG
@@ -107,7 +110,6 @@ int main(int argc, char **argv)
             break;
         case 2:
 #ifdef DEBUG
-            // TODO: Implement tests module
             if (strncmp(argv[1], "-t", 2) == 0 || strncmp(argv[0], "--test", 6) == 0) {
                 return tests_run();
             }
