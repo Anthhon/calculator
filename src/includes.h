@@ -7,4 +7,13 @@
     fprintf(stderr, __VA_ARGS__); \
     exit(EXIT_FAILURE)
 
+#ifdef DEBUG
+#define _Debug(code) \
+    do { \
+        code \
+    } while(0)
+#else
+#define _Debug(code)
+#endif
+
 #endif // _INCLUDES_H_

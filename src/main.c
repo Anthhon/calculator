@@ -1,63 +1,20 @@
+#include "interpreter.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <libgen.h>
-#include <math.h>
+
+//#define DEBUG
 
 #include "includes.h"
-#include "parser.h"
-#include "lexer.h"
 #include "reporter.h"
+#include "lexer.h"
 #include "tests.h"
 
-void print_tabs(size_t quantity) {
-    for (size_t i = 0; i < quantity; ++i) {
-        printf("    ");
-    }
-}
+// DEBUG CODE ///////////////////////////////////////////////////////////////
+#ifdef DEBUG
 
-void usage_print(char *program)
-{
-    char *program_name = basename(program);
-
-    LogInfo("Usage: %s <formula>\n", program_name);
-    exit(EXIT_SUCCESS);
-}
-
-size_t tree_node_id = 0;
-void tree_print_rec(TreeNode *tree_root, size_t level)
-{
-    print_tabs(level);
-    fprintf(stdout, "Node %lu {\n", ++tree_node_id);
-
-    print_tabs(level);
-    fprintf(stdout, "type: %i\n", tree_root->node_type);
-
-    print_tabs(level);
-    fprintf(stdout, "value: %i\n", tree_root->value);
-
-    print_tabs(level);
-    fprintf(stdout, "left:\n");
-    if (tree_root->node_left != NULL) {
-        tree_print_rec(tree_root->node_left , level + 1);
-    }
-
-    print_tabs(level);
-    fprintf(stdout, "right:\n");
-    if (tree_root->node_right != NULL) {
-        tree_print_rec(tree_root->node_right, level + 1);
-    }
-
-    print_tabs(level);
-    fprintf(stdout, "}\n");
-}
-
-void tree_print(TreeNode *tree_root) {
-    tree_print_rec(tree_root, 0);
-}
-
-// This function is intended to be used only for debugging purposes
 void tokens_print(TokensManager *tokens_manager)
 {
     char *tok_text = NULL;
@@ -72,17 +29,26 @@ void tokens_print(TokensManager *tokens_manager)
             error_report(ERR_INSUFICIENT_MEMORY, NULL);
         }
 
-        printf("\tToken %u::(text: %s, len: %u, pos: %u, type: %i)\n", 
+        printf("\tToken %u::(type: %i, value: %f)\n", 
                 i, 
-                tok_text, 
-                tokens_manager->tokens[i].length, 
-                tokens_manager->tokens[i].position, 
-                tokens_manager->tokens[i].type);
+                tokens_manager->tokens[i].type,
+                tokens_manager->tokens[i].value);
 
         free(tok_text);
         tok_text = NULL;
     }
     printf("}\n");
+}
+
+#endif
+/////////////////////////////////////////////////////////////////////////////
+
+void usage_print(char *program)
+{
+    char *program_name = basename(program);
+
+    LogInfo("Usage: %s <formula>\n", program_name);
+    exit(EXIT_SUCCESS);
 }
 
 void calculate_formula(char *formula)
@@ -93,40 +59,61 @@ void calculate_formula(char *formula)
         .text = formula,
     };
 
-
     tokenize_input(&tokens_manager);
-    tokens_print(&tokens_manager);
+    if (tokens_manager.tokens == NULL) {
+        error_report(ERR_COULD_NOT_TOKENIZE_INPUT, NULL);
+    }
 
-    //TreeNode *tree_root = parse_tokens(&tokens_manager);
+    _Debug({
+            tokens_print(&tokens_manager);
+    });
 
-    ////tree_sort_by_type(tree_root);
-    //tree_print(tree_root);
-    
+    double result = interpret_tree(&tokens_manager);
+    fprintf(stdout, "%f\n", result);
+
     free(tokens_manager.tokens);
     tokens_manager.tokens = NULL;
 }
 
-#define DEBUG
 int main(int argc, char **argv)
 {
-    switch (argc)
-    {
+    switch (argc) {
         case 1:
             usage_print(argv[0]);
             break;
         case 2:
-#ifdef DEBUG
-            if (strncmp(argv[1], "-t", 2) == 0 || strncmp(argv[0], "--test", 6) == 0) {
-                return tests_run();
-            }
-#endif
+            _Debug({
+                if (strncmp(argv[1], "-t", 2) == 0 || strncmp(argv[1], "--test", 6) == 0) {
+                    return tests_run();
+                }
+            });
 
             calculate_formula(argv[1]);
             break;
         default:
-            // TODO: Handle multiple arguments input, when multiple args were passed it should
-            // concatenate them all in a single 'String' and pass them into 'calculate_formula'
-            LogExit("Multiple arguments not handled yet!\n");
+            // Concatenate all arguments into a single string
+            {
+                int total_length = 0;
+                for (int i = 1; i < argc; ++i) {
+                    total_length += strlen(argv[i]);
+                }
+                total_length += argc - 2;
+
+                char* formula = (char*)malloc(total_length + 1);
+                if (formula == NULL) {
+                    error_report(ERR_INSUFICIENT_MEMORY, NULL);
+                    return 1;
+                }
+
+                formula[0] = '\0';
+
+                for (int i = 1; i < argc; ++i) {
+                    strcat(formula, argv[i]);
+                }
+
+                calculate_formula(formula);
+                free(formula);
+            }
             break;
     }
 

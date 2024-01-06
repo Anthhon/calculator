@@ -4,9 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "includes.h"
-
-#define OPERATIONS_SYMBOLS "+-*/^"
+#define OPERATIONS_SYMBOLS "+-*/^{}[]()"
 
 typedef enum {
     // Others
@@ -28,6 +26,7 @@ typedef struct {
     uint16_t length;
     uint16_t position;
     TokenType type;
+    double value;
 } Token;
 
 typedef struct {
@@ -36,7 +35,7 @@ typedef struct {
     const char *text;
 } TokensManager;
 
-void token_push(TokensManager *tokens_manager, const uint16_t length, const uint16_t position, const TokenType type);
+void token_push(TokensManager *tokens_manager, const TokenType type, const double t_value);
 void tokenize_input(TokensManager *tokens_manager);
 
 #endif // _TOKENIZER_H_
