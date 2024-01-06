@@ -69,7 +69,7 @@ void calculate_formula(char *formula)
     });
 
     double result = interpret_tree(&tokens_manager);
-    fprintf(stdout, "%f\n", result);
+    fprintf(stdout, "%2.3f\n", result);
 
     free(tokens_manager.tokens);
     tokens_manager.tokens = NULL;
