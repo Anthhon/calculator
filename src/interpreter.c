@@ -2,8 +2,12 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "interpreter.h"
 #include "includes.h"
 #include "lexer.h"
+
+uint64_t greater_type_operations = 0;
+TokenType greater_type = TOKEN_NONE;
 
 void replace_tokens(TokensManager *tokens_manager, uint16_t index, uint16_t offset)
 {
@@ -24,7 +28,11 @@ TokenType get_greater_type(TokensManager *tokens_manager)
     TokenType greater_type = TOKEN_ADD;
     for (int i = 0; i < tokens_manager->capacity; ++i) {
         if (tokens_manager->tokens[i].type > greater_type) {
+            greater_type_operations = 0;
             greater_type = tokens_manager->tokens[i].type;
+        }
+        if (tokens_manager->tokens[i].type == greater_type) {
+            ++greater_type_operations;
         }
     }
 
@@ -36,14 +44,17 @@ double interpret_tree(TokensManager *tokens_manager)
     if (tokens_manager->capacity == 1) {
         return tokens_manager->tokens[0].value;
     }
-
-    TokenType greater_type = get_greater_type(tokens_manager);
+    if (greater_type_operations <= 0 || greater_type == 0) {
+        greater_type = get_greater_type(tokens_manager);
+        return interpret_tree(tokens_manager);
+    }
 
     for (int i = 0; i < tokens_manager->capacity; ++i) {
         Token actual_token = tokens_manager->tokens[i];
         if (actual_token.type >= greater_type) {
             Token prev_token = tokens_manager->tokens[i - 1];
             Token next_token = tokens_manager->tokens[i + 1];
+            --greater_type_operations;
 
             double f_val = prev_token.value;
             double s_val = next_token.value;
