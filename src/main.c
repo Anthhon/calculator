@@ -51,7 +51,7 @@ void usage_print(char *program)
     exit(EXIT_SUCCESS);
 }
 
-void calculate_formula(char *formula)
+double calculate_formula(char *formula)
 {
     TokensManager tokens_manager = {
         .tokens = NULL,
@@ -69,10 +69,11 @@ void calculate_formula(char *formula)
     });
 
     double result = interpret_tree(&tokens_manager);
-    fprintf(stdout, "%2.3f\n", result);
 
     free(tokens_manager.tokens);
     tokens_manager.tokens = NULL;
+
+    return result;
 }
 
 int main(int argc, char **argv)
@@ -82,13 +83,13 @@ int main(int argc, char **argv)
             usage_print(argv[0]);
             break;
         case 2:
-            _Debug({
-                if (strncmp(argv[1], "-t", 2) == 0 || strncmp(argv[1], "--test", 6) == 0) {
-                    return tests_run();
-                }
-            });
+            if (strncmp(argv[1], "-t", 2) == 0 || strncmp(argv[1], "--test", 6) == 0) {
+                return tests_run();
+            }
 
-            calculate_formula(argv[1]);
+            double result = calculate_formula(argv[1]);
+            fprintf(stdout, "%2.3f\n", result);
+
             break;
         default:
             // Concatenate all arguments into a single string
@@ -111,7 +112,9 @@ int main(int argc, char **argv)
                     strcat(formula, argv[i]);
                 }
 
-                calculate_formula(formula);
+                double result = calculate_formula(formula);
+                fprintf(stdout, "%2.3f\n", result);
+
                 free(formula);
             }
             break;

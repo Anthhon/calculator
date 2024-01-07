@@ -16,6 +16,18 @@ build-linux:
 	@echo "[+] Project built successfully!"
 
 
+install-linux:
+	@echo "[+] Building project..."
+	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) 
+	@echo "[+] Project built successfully!"
+	@read -p "Do you want to install the binary to /usr/local/bin? (y/n): " answer; \
+	if [ "$$answer" != "${answer#[Yy]}" ]; then \
+		sudo cp $(BUILD_PATH)/$(EXECUTABLE) /usr/local/bin/; \
+		echo "[+] Binary installed to /usr/local/bin/"; \
+	else \
+		echo "[+] Installation aborted."; \
+	fi
+
 build-windows:
 	@echo "[+] Building project..."
 	i686-w64-mingw32-gcc $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE).exe $(SRC_PATH)/*.c $(LIBS)
