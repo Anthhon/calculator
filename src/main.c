@@ -94,19 +94,19 @@ int main(int argc, char **argv)
         default:
             // Concatenate all arguments into a single string
             {
-                int total_length = 0;
+                size_t total_length = 0;
                 for (int i = 1; i < argc; ++i) {
                     total_length += strlen(argv[i]);
+                    ++total_length;
                 }
-                total_length += argc - 2;
 
-                char* formula = (char*)malloc(total_length + 1);
+                char *formula = malloc(sizeof(*formula) * (total_length + 1));
                 if (formula == NULL) {
                     error_report(ERR_INSUFICIENT_MEMORY, NULL);
                     return 1;
                 }
 
-                formula[0] = '\0';
+                formula[total_length] = '\0';
 
                 for (int i = 1; i < argc; ++i) {
                     strcat(formula, argv[i]);
