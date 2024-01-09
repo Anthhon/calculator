@@ -44,7 +44,10 @@ double interpret_tree(TokensManager *tokens_manager)
     if (tokens_manager->capacity == 1) {
         return tokens_manager->tokens[0].value;
     }
-    if (greater_type_operations <= 0 || greater_type == 0) {
+    if (tokens_manager->capacity == 2 && tokens_manager->tokens[0].type == TOKEN_SUB) {
+        return -(tokens_manager->tokens[1].value);
+    }
+    if (greater_type_operations == 0 || greater_type == 0) {
         greater_type = get_greater_type(tokens_manager);
         return interpret_tree(tokens_manager);
     }

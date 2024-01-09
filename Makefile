@@ -11,12 +11,16 @@ EXECUTABLE=calc
 all: build
 
 build-linux:
+	@echo "[+] Checking build folder existence..."
+	mkdir -p $(BUILD_PATH)
 	@echo "[+] Building project..."
 	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) 
 	@echo "[+] Project built successfully!"
 
 
 install-linux:
+	@echo "[+] Checking build folder existence..."
+	mkdir -p $(BUILD_PATH)
 	@echo "[+] Building project..."
 	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) 
 	@echo "[+] Project built successfully!"
@@ -34,11 +38,15 @@ build-windows:
 	@echo "[+] Project built successfully!"
 
 debug:
+	@echo "[+] Checking build folder existence..."
+	mkdir -p $(BUILD_PATH)
 	@echo "[+] Building project..."
 	$(CC) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) -g
 	@echo "[+] Project built successfully!"
 
 gprof-build:
+	@echo "[+] Checking build folder existence..."
+	mkdir -p $(BUILD_PATH)
 	@echo "[+] Building project..."
 	$(CC) $(FLAGS) -o $(BUILD_PATH)/$(EXECUTABLE) $(SRC_PATH)/*.c $(LIBS) -g -pg
 	@echo "[+] Project built successfully!"
