@@ -49,7 +49,12 @@ void tokenize_input(TokensManager *tokens_manager)
             }
             t_type = TOKEN_NUMBER;
 
-            char *t_value_str = malloc(sizeof(*t_value_str) * t_length);
+            char *t_value_str = malloc(sizeof(*t_value_str) * t_length + 1);
+            if (t_value_str == NULL) {
+                error_report(ERR_INSUFICIENT_MEMORY, NULL);
+            }
+
+            memset(t_value_str, 0, sizeof(*t_value_str) * t_length + 1);
             strncpy(t_value_str, &tokens_manager->text[current_pos - t_length], t_length);
 
             double t_value = atof(t_value_str);

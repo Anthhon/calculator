@@ -23,7 +23,7 @@ uint8_t test_lexer_1(void)
     TokensManager tokens_manager = {
         .tokens = NULL,
         .capacity = 0,
-        .text = "-200 + 3 *4 / 2^33",
+        .text = "-200+3*4/2^33",
     };
 
     tokenize_input(&tokens_manager);
@@ -33,12 +33,24 @@ uint8_t test_lexer_1(void)
 
     for (size_t i = 0; i < tokens_manager.capacity; ++i) {
         ++exit_status;
-        if (tokens_manager.tokens[i].type != expected_types[i]) return exit_status;
+        if (tokens_manager.tokens[i].type != expected_types[i]) {
+            _Debug({
+                    fprintf(stderr, "Expected: %i - Given: %i\n", expected_types[i], tokens_manager.tokens[i].type);
+                    fprintf(stderr, "^-- Error in %li'th token\n", i + 1);
+                    })
+            return exit_status;
+        }
     }
 
     for (size_t i = 0; i < tokens_manager.capacity; ++i) {
         ++exit_status;
-        if (tokens_manager.tokens[i].value != expected_values[i]) return exit_status;
+        if (tokens_manager.tokens[i].value != expected_values[i]) {
+            _Debug({
+                    fprintf(stderr, "Expected: %i - Given: %i\n", expected_types[i], tokens_manager.tokens[i].type);
+                    fprintf(stderr, "^-- Error in %li'th token\n", i + 1);
+                    })
+            return exit_status;
+        }
     }
 
     return 0;
@@ -56,7 +68,7 @@ uint8_t test_lexer_2(void)
     TokensManager tokens_manager = {
         .tokens = NULL,
         .capacity = 0,
-        .text = "120 +120* 10^2/ 10",
+        .text = "120+120*10^2/10",
     };
 
     tokenize_input(&tokens_manager);
@@ -66,12 +78,24 @@ uint8_t test_lexer_2(void)
 
     for (size_t i = 0; i < tokens_manager.capacity; ++i) {
         ++exit_status;
-        if (tokens_manager.tokens[i].type != expected_types[i]) return exit_status;
+        if (tokens_manager.tokens[i].type != expected_types[i]) {
+            _Debug({
+                    fprintf(stderr, "Expected: %i - Given: %i\n", expected_types[i], tokens_manager.tokens[i].type);
+                    fprintf(stderr, "^-- Error in %li'th token\n", i + 1);
+                    })
+            return exit_status;
+        }
     }
 
     for (size_t i = 0; i < tokens_manager.capacity; ++i) {
         ++exit_status;
-        if (tokens_manager.tokens[i].value != expected_values[i]) return exit_status;
+        if (tokens_manager.tokens[i].value != expected_values[i]) {
+            _Debug({
+                    fprintf(stderr, "Expected: %i - Given: %i\n", expected_types[i], tokens_manager.tokens[i].type);
+                    fprintf(stderr, "^-- Error in %li'th token\n", i + 1);
+                    })
+            return exit_status;
+        }
     }
 
     return 0;
