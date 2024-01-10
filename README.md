@@ -8,16 +8,35 @@
 calc <formula>
 ```
 
+## Installing
+
+```bash
+git clone git@github.com:Anthhon/calculator.git
+cd calculator
+make build-linux # or make build-windows
+./build/calc -t
+```
+
+After using these commands above, you should see a sequence of successful messages on your screen, signalizing that the application is working correctly. After that, the program can be installed automatically into your Linux system by using this command:
+
+```bash
+make install-linux
+```
+
 ## Project Roadmap
 
 - [X] Arguments parsing
 - [X] Implement lexer to tokenize input
-- [ ] Implement parser to handle tokens and produces an abstract syntax tree
-- [ ] Implement formula interpreter
-- [ ] Create test script
-- [ ] Improve interpreter to handle equations
-- [ ] Search (and implement solutions) for errors and edge cases
-- [ ] Search for possible optimizations
+- [X] Implement formula interpreter
+- [X] Create test script
+
+## Features
+
+- [X] Handle 4 basic operations (+, -, *, /)
+- [X] Handle number powering (^)
+- [X] Handle float number input
+- [ ] Handle logarithmic
+- [ ] Handle {[()]} symbols
 
 ## Contact
 
