@@ -42,7 +42,7 @@ void tokenize_input(TokensManager *tokens_manager)
         TokenType t_type = TOKEN_NONE;
 
         if (is_number(current_char)) {
-            while (is_number(current_char)) {
+            while (is_number(current_char) || current_char == '.') {
                 ++t_length;
                 ++current_pos;
                 current_char = tokens_manager->text[current_pos];
