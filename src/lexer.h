@@ -26,6 +26,7 @@ typedef struct {
     uint16_t length;
     uint16_t position;
     TokenType type;
+    uint16_t priority;
     double value;
 } Token;
 
@@ -35,7 +36,7 @@ typedef struct {
     const char *text;
 } TokensManager;
 
-void token_push(TokensManager *tokens_manager, const TokenType type, const double t_value);
+void token_push(TokensManager *tokens_manager, const TokenType t_type, const uint16_t t_priority, const double t_value);
 void tokenize_input(TokensManager *tokens_manager);
 
 #endif // _TOKENIZER_H_

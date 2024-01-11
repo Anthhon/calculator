@@ -110,25 +110,25 @@ void test_formulas(void)
         LogInfo("\rTest %u - %sFailed!%s\n ", test_num, BHRED, CRESET);
     }
 
-    if (calculate_formula("1000 -333") == 667.0) {
+    if (calculate_formula("10.5 -5.3") == 5.2) {
         LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
     } else {
         LogInfo("\rTest %u - %sFailed!%s\n ", ++test_num, BHRED, CRESET);
     }
 
-    if (calculate_formula("25*4 ") == 100.0) {
+    if (calculate_formula("2* 3.5 ") == 7.000) {
         LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
     } else {
         LogInfo("\rTest %u - %sFailed!%s\n ", ++test_num, BHRED, CRESET);
     }
 
-    if (calculate_formula(" 144/12") == 12.0) {
+    if (calculate_formula("(15.6 +3.4)/ 4") == 4.75) {
         LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
     } else {
         LogInfo("\rTest %u - %sFailed!%s\n ", ++test_num, BHRED, CRESET);
     }
 
-    if (calculate_formula("2^6") == 64.0) {
+    if (calculate_formula("[2.0^3]") == 8) {
         LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
     } else {
         LogInfo("\rTest %u - %sFailed!%s\n ", ++test_num, BHRED, CRESET);
@@ -138,6 +138,12 @@ void test_formulas(void)
         LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
     } else {
         LogInfo("\rTest %u - %sFailed!%s\n ", ++test_num, BHRED, CRESET);
+    }
+
+    if (calculate_formula("{(3 * 5) + 10 ^ 2 / 2 - 4}") == 61.0) {
+        LogInfo("\rTest %u - %sSucceeded!%s\n", ++test_num, BHGRN, CRESET);
+    } else {
+        LogInfo("\rTest %u - %sFailed!%s\n", ++test_num, BHRED, CRESET);
     }
 }
 

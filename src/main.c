@@ -29,9 +29,10 @@ void tokens_print(TokensManager *tokens_manager)
             error_report(ERR_INSUFICIENT_MEMORY, NULL);
         }
 
-        printf("\tToken %u::(type: %i, value: %f)\n", 
+        printf("\tToken %u::(type: %i, priority: %i, value: %f)\n", 
                 i, 
                 tokens_manager->tokens[i].type,
+                tokens_manager->tokens[i].priority,
                 tokens_manager->tokens[i].value);
 
         free(tok_text);

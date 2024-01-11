@@ -9,6 +9,7 @@ typedef enum {
     ERR_NOT_FOUND_TOKEN_VALUE,
     ERR_COULD_NOT_TOKENIZE_INPUT,
     ERR_COULD_NOT_PARSE_TREE,
+    ERR_MISSING_SYMBOL,
 } ErrorType;
 
 void error_report(const ErrorType t_error, const char *text);
