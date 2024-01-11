@@ -38,8 +38,8 @@ static uint32_t symbols_counter = 0;
 
 void tokenize_input(TokensManager *tokens_manager)
 {
-    uint32_t text_l = strlen(tokens_manager->text) - 1;
-    for (uint16_t current_pos = 0; current_pos < strlen(tokens_manager->text); ++current_pos) {
+    uint32_t text_l = strlen(tokens_manager->text);
+    for (uint16_t current_pos = 0; current_pos < text_l; ++current_pos) {
         uint16_t t_length = 0;
         char current_char = tokens_manager->text[current_pos];
         TokenType t_type = TOKEN_NONE;
@@ -131,11 +131,6 @@ void tokenize_input(TokensManager *tokens_manager)
                 if (current_pos == text_l) {
                     error_report(ERR_INVALID_LAST_CHAR, &current_char);
                 }
-                if (current_pos == 0 && tokens_manager->text[text_l] == current_char + 1) {
-                    --text_l;
-                    continue;
-                    break;
-                }
 
                 ++symbols_counter;
                 t_priority += TOKEN_L_PARENTHESES;
@@ -154,11 +149,6 @@ void tokenize_input(TokensManager *tokens_manager)
                 if (current_pos == text_l) {
                     error_report(ERR_INVALID_LAST_CHAR, &current_char);
                 }
-                if (current_pos == 0 && tokens_manager->text[text_l] == current_char + 2) {
-                    --text_l;
-                    continue;
-                    break;
-                }
 
                 ++symbols_counter;
                 t_priority += TOKEN_L_BRACKET;
@@ -176,11 +166,6 @@ void tokenize_input(TokensManager *tokens_manager)
             case '{':
                 if (current_pos == text_l) {
                     error_report(ERR_INVALID_LAST_CHAR, &current_char);
-                }
-                if (current_pos == 0 && tokens_manager->text[text_l] == current_char + 2) {
-                    --text_l;
-                    continue;
-                    break;
                 }
 
                 ++symbols_counter;

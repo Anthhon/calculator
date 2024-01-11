@@ -5,6 +5,7 @@
 #include "interpreter.h"
 #include "includes.h"
 #include "lexer.h"
+#include "main.h"
 
 static uint64_t greater_prior_operations = 0;
 static TokenType greater_priority = TOKEN_NONE;
@@ -25,21 +26,22 @@ void replace_tokens(TokensManager *tokens_manager, uint16_t index, uint16_t offs
 
 TokenType get_greater_type(TokensManager *tokens_manager)
 {
-    TokenType greater_priority = TOKEN_ADD;
+    TokenType tmp_greater_priority = TOKEN_ADD;
+
     for (int i = 0; i < tokens_manager->capacity; ++i) {
         uint16_t t_priority = tokens_manager->tokens[i].type + tokens_manager->tokens[i].priority;
         if (tokens_manager->tokens[i].type > TOKEN_NUMBER) {
-            if (t_priority > greater_priority) {
+            if (t_priority > tmp_greater_priority) {
                 greater_prior_operations = 0;
-                greater_priority = t_priority;
+                tmp_greater_priority = t_priority;
             }
-            if (t_priority == greater_priority) {
+            if (t_priority == tmp_greater_priority) {
                 ++greater_prior_operations;
             }
         }
     }
 
-    return greater_priority;
+    return tmp_greater_priority;
 }
 
 double interpret_tree(TokensManager *tokens_manager)
@@ -50,14 +52,14 @@ double interpret_tree(TokensManager *tokens_manager)
     if (tokens_manager->capacity == 2 && tokens_manager->tokens[0].type == TOKEN_SUB) {
         return -(tokens_manager->tokens[1].value);
     }
-    if (greater_prior_operations == 0 || greater_priority == 0) {
+    if (greater_prior_operations <= 0 || greater_priority == 0) {
         greater_priority = get_greater_type(tokens_manager);
         return interpret_tree(tokens_manager);
     }
 
     for (int i = 0; i < tokens_manager->capacity; ++i) {
         Token actual_token = tokens_manager->tokens[i];
-        if (actual_token.type + actual_token.priority >= greater_priority) {
+        if (actual_token.type > TOKEN_NUMBER && actual_token.type + actual_token.priority >= greater_priority) {
             Token prev_token = tokens_manager->tokens[i - 1];
             Token next_token = tokens_manager->tokens[i + 1];
             --greater_prior_operations;

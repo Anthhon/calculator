@@ -9,17 +9,22 @@
 typedef enum {
     // Others
     TOKEN_NONE = 0,
-    TOKEN_NUMBER,
+    TOKEN_NUMBER = 1,
 
     // Operations
-    TOKEN_ADD, TOKEN_SUB,
-    TOKEN_MUL, TOKEN_DIV,
-    TOKEN_POW,
+    TOKEN_ADD = 2,
+    TOKEN_SUB = 3,
+    TOKEN_MUL = 4,
+    TOKEN_DIV = 5,
+    TOKEN_POW = 6,
 
     // Symbols
-    TOKEN_L_BRACE, TOKEN_R_BRACE,
-    TOKEN_L_BRACKET, TOKEN_R_BRACKET,
-    TOKEN_L_PARENTHESES, TOKEN_R_PARENTHESES,
+    TOKEN_L_BRACE = 7,
+    TOKEN_R_BRACE = 7,
+    TOKEN_L_BRACKET = 8,
+    TOKEN_R_BRACKET = 8,
+    TOKEN_L_PARENTHESES = 9,
+    TOKEN_R_PARENTHESES = 9,
 } TokenType;
 
 typedef struct {
