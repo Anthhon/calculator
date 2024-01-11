@@ -6,11 +6,12 @@
 #include "includes.h"
 #include "lexer.h"
 #include "main.h"
+#include "reporter.h"
 
 static uint64_t greater_prior_operations = 0;
 static TokenType greater_priority = TOKEN_NONE;
 
-void replace_tokens(TokensManager *tokens_manager, uint16_t index, uint16_t offset)
+void tokens_replace(TokensManager *tokens_manager, uint16_t index, uint16_t offset)
 {
     // 120, +, 120, NULL, NULL, +, 10
     // Turns into
@@ -44,7 +45,7 @@ TokenType get_greater_type(TokensManager *tokens_manager)
     return tmp_greater_priority;
 }
 
-double interpret_tree(TokensManager *tokens_manager)
+double tokens_interpret_recursive(TokensManager *tokens_manager)
 {
     if (tokens_manager->capacity == 1) {
         return tokens_manager->tokens[0].value;
@@ -54,7 +55,7 @@ double interpret_tree(TokensManager *tokens_manager)
     }
     if (greater_prior_operations <= 0 || greater_priority == 0) {
         greater_priority = get_greater_type(tokens_manager);
-        return interpret_tree(tokens_manager);
+        return tokens_interpret_recursive(tokens_manager);
     }
 
     for (int i = 0; i < tokens_manager->capacity; ++i) {
@@ -93,9 +94,43 @@ double interpret_tree(TokensManager *tokens_manager)
             tokens_manager->tokens[i].type = TOKEN_NONE;
             tokens_manager->tokens[i + 1].type = TOKEN_NONE;
 
-            replace_tokens(tokens_manager, i, 2);
+            tokens_replace(tokens_manager, i, 2);
             break;
         }
     }
-    return interpret_tree(tokens_manager);
+    return tokens_interpret_recursive(tokens_manager);
 }
+
+void tokens_check(TokensManager *tokens_manager)
+{
+    for (uint16_t i = 0; i < tokens_manager->capacity; ++i) {
+        Token actual_token = tokens_manager->tokens[i];
+
+        // Handle operations with negative numbers
+        if (actual_token.type == TOKEN_SUB && \
+            tokens_manager->tokens[i - 1].type > TOKEN_NUMBER) {
+                tokens_manager->tokens[i + 1].value *= -1;
+                tokens_manager->tokens[i].type = TOKEN_NONE;
+
+                tokens_replace(tokens_manager, i, 1);
+
+                if (tokens_manager->tokens[i].type > TOKEN_NUMBER) {
+                    error_report(ERR_EXTRA_OPERATOR, NULL);
+                }
+        }
+
+        // Handle extra operators
+        if (actual_token.type > TOKEN_NUMBER && tokens_manager->tokens[i - 1].type > TOKEN_NUMBER) {
+                if (tokens_manager->tokens[i].type > TOKEN_NUMBER) {
+                    error_report(ERR_EXTRA_OPERATOR, NULL);
+                }
+        }
+    }
+}
+
+double tokens_interpret(TokensManager *tokens_manager) {
+    tokens_check(tokens_manager);
+
+    return tokens_interpret_recursive(tokens_manager);
+}
+

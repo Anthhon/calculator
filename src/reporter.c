@@ -26,10 +26,13 @@ void error_report(const ErrorType t_error, const char *text)
             LogExit("Could not tokenize input.\n");
             break;
         case ERR_COULD_NOT_PARSE_TREE:
-            LogExit("Parsing tree was found empty after parsing process.\n");
+            LogExit("Any token was found during parsing process.\n");
             break;
         case ERR_MISSING_SYMBOL:
             LogExit("Formula has some missing symbol.\n");
+            break;
+        case ERR_EXTRA_OPERATOR:
+            LogExit("Formula has some extra operator.\n");
             break;
         default:
             LogExit("Congratulations, you invoked a non existent error code!\n");

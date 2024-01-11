@@ -69,7 +69,7 @@ double calculate_formula(char *formula)
             tokens_print(&tokens_manager);
     });
 
-    double result = interpret_tree(&tokens_manager);
+    double result = tokens_interpret(&tokens_manager);
 
     free(tokens_manager.tokens);
     tokens_manager.tokens = NULL;

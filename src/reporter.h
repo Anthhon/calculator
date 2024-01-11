@@ -10,6 +10,7 @@ typedef enum {
     ERR_COULD_NOT_TOKENIZE_INPUT,
     ERR_COULD_NOT_PARSE_TREE,
     ERR_MISSING_SYMBOL,
+    ERR_EXTRA_OPERATOR,
 } ErrorType;
 
 void error_report(const ErrorType t_error, const char *text);

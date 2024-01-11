@@ -65,6 +65,7 @@ void tokenize_input(TokensManager *tokens_manager)
             // Avoid jumping 1 character after reading some number,
             // removing this line can lead to a bug
             --current_pos;
+
             token_push(tokens_manager, t_type, t_priority, t_value);
 
             free(t_value_str);

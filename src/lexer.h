@@ -19,12 +19,12 @@ typedef enum {
     TOKEN_POW = 6,
 
     // Symbols
-    TOKEN_L_BRACE = 7,
-    TOKEN_R_BRACE = 7,
-    TOKEN_L_BRACKET = 8,
-    TOKEN_R_BRACKET = 8,
-    TOKEN_L_PARENTHESES = 9,
-    TOKEN_R_PARENTHESES = 9,
+    TOKEN_L_PARENTHESES = 7,
+    TOKEN_R_PARENTHESES = 7,
+    TOKEN_L_BRACE = 8,
+    TOKEN_R_BRACE = 8,
+    TOKEN_L_BRACKET = 9,
+    TOKEN_R_BRACKET = 9,
 } TokenType;
 
 typedef struct {
