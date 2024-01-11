@@ -34,9 +34,10 @@ make install-linux
 
 - [X] Handle 4 basic operations (+, -, *, /)
 - [X] Handle number powering (^)
-- [X] Handle float number input
+- [X] Negative number operations
+- [X] Float number operations
+- [X] Handle {[()]} symbols
 - [ ] Handle logarithmic
-- [ ] Handle {[()]} symbols
 
 ## Contact
 
